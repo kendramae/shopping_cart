@@ -47,7 +47,7 @@ def read_melon_types_from_file(filepath):
 
     melon_types = {}
 
-    for line in open(filepath):
+    for line in open(filepath):          #unpack text file into variables
         (id,
          melon_type,
          common_name,
