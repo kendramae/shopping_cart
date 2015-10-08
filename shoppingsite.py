@@ -7,7 +7,7 @@ Authors: Joel Burton, Christian Fernandez, Meggie Mahnken.
 """
 
 
-from flask import Flask, render_template, redirect, flash, session
+from flask import Flask, render_template, redirect, flash, session, request
 import jinja2
 
 import melons
@@ -30,8 +30,6 @@ app.jinja_env.undefined = jinja2.StrictUndefined
 @app.route("/")
 def index():
     """Return homepage."""
-    session['our key'] = 'our value'
-    print session
     return render_template("homepage.html")
 
 
@@ -56,6 +54,7 @@ def show_melon(melon_id):
     return render_template("melon_details.html",
                            display_melon=melon)
 
+    #make a button that adds the melon to the cart and jumps you to your cart
 
 @app.route("/cart")
 def shopping_cart():
@@ -82,14 +81,23 @@ def add_to_cart(id):
     When a melon is added to the cart, redirect browser to the shopping cart
     page and display a confirmation message: 'Successfully added to cart'.
     """
-
+    qty = int(request.args.get("qty"))
     # TODO: Finish shopping cart functionality
-
+    session["shopping_cart"] = {}
     # The logic here should be something like:
     #
     # - add the id of the melon they bought to the cart in the session
+    session["shopping_cart"][id] = session["shopping_cart"].get(id, 0) + qty
+    melon = melons.get_by_id(id)
+    melon_name = melon.common_name
+    if qty > 1:
+        melon_name += "s"
 
-    return "Oops! This needs to be implemented!"
+    flash("{} {} successfully added to the cart!".format(qty, melon_name))
+
+    print session
+
+    return redirect("/cart")
 
 
 @app.route("/login", methods=["GET"])

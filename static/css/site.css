@@ -2,6 +2,9 @@
 
 
 /* Style our Ubermelon logo. */
+#cart-add {
+    color: black;
+}
 
 div.navbar-header img {
     width: 30px;
